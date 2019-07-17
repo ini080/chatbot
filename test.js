@@ -80,30 +80,26 @@ app.get('/', function(req, res, next){
 app.post('/dest/:desti', function(req, res){
 
     // 카카오톡 오픈빌더는 req.body.action.params 에 파라미터가 담겨있음.
-
-
-    //console.log('요청 : ' +  req.body.action.params.desti)
-
-     //local 용
-    //var dest = req.params.desti;
     //console.log('요청 : ' + req.params.desti);
+
+    //console.log('파라미터 : ' +  req.body.action.params.desti)
+
+    // local 용
+    //var dest = req.params.desti;
 
     // 카톡용
     var dest = req.body.action.params.desti
-    console.log('요청 : ' +  req.body.action.params.desti)
-
 
     var haveData = false;   //데이터가 있는지 없는지 확인하는 플래그 변수
-    var Answer = {
-      bus_station:{
-        방향 : '',
-        버스이름 : '',
-        남은시간 : '',
-        남은정류장수 : ''
-      }
+    var Answer = new Array(); // 도착정보 데이터를 담을 배열 변수.
 
-    } // 도착정보 데이터를 담을 배열 변수.
-
+    var 버스번호 = ''
+    var 버스이름 = ''
+    var 남은시간 = ''
+    var 남은정류장수 = ''
+    var 곧도착 = ''
+    var 다음정류장 = ''
+    var 방향 = ''
 
 
     // Firebase DB 에서 탐색.
@@ -121,7 +117,7 @@ app.post('/dest/:desti', function(req, res){
           const $api_url = $url + '?serviceKey=' + $KEY + '&BUSSTOP_ID=' +des_bus_id; // BUSSTOP_ID 를 파라미터에 넣어 URL 생성.
 
           console.log("최종URL : " + $api_url);
-
+          console.log(다음정류장)
 
           // API 에 요청. rq_data에 원하는 정보가 담겨있음.
           request($api_url, function(rq_err,rq_res,rq_data){
@@ -138,28 +134,31 @@ app.post('/dest/:desti', function(req, res){
               //console.log('남은 시간 : ' + obj.BUSSTOP_LIST[i].REMAIN_MIN + '분');
               //console.log('남은 정류장 수 : ' + obj.BUSSTOP_LIST[i].REMAIN_STOP +'개' );
               //console.log("----------------------------------------------------");
+              console.log('다음정류장  : ' + childData.NEXT_STATION);
+              var json_data = {
+                //버스번호 : des_bus_id,
+                방향 : childData.NEXT_STATION+' 방향',
+                버스이름 : obj.BUSSTOP_LIST[i].LINE_NAME ,
+                남은시간 : obj.BUSSTOP_LIST[i].REMAIN_MIN + '분',
+                남은정류장수 : obj.BUSSTOP_LIST[i].REMAIN_STOP +'개',
+                //곧도착 : obj.BUSSTOP_LIST[i].ARRIVE_FLAG == 1 ? '곧 도착 !! ' : '멀었네~',
 
-              var bus_number = des_bus_id;
-              var bus_name = obj.BUSSTOP_LIST[i].LINE_NAME;
-              var bus_time = obj.BUSSTOP_LIST[i].REMAIN_MIN;
-              var bus_remain_station = obj.BUSSTOP_LIST[i].REMAIN_STOP;
+              }
 
-              Answer.bus_station.방향 = childData.NEXT_STATION +'\n';
-              Answer.bus_station.버스이름 = bus_name +'\n\r';
-              Answer.bus_station.남은시간 = bus_time '+ '\r\n';
-              Answer.bus_station.남은정류장수 = bus_remain_station +'\\n';
-              console.log(bus_name + " " + bus_time + " "  + bus_remain_station)
+            //console.log(json_data)
+            Answer.push(json_data);
+
           }
-          console.log('최종 : ' + Answer)
           })
-
-
         }
       })
 
     })
+      var json = '{"정류장":12\n\r, "남은시간":42}';
+      objzz = JSON.parse(json);
 
-      setTimeout(function(){ res.json( { message : Answer , typeof : typeof Answer  } )   } , 1300);
+      setTimeout(function(){ Answer= objzz } , 1200);
+      setTimeout(function(){ res.send( {success:haveData?'데이터 있음' : '데이터 없음', message:Answer })   } , 1300);
 });
 
 app.listen(9000, () => {
