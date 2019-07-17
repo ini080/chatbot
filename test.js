@@ -137,28 +137,22 @@ app.post('/dest/:desti', function(req, res){
               console.log('다음정류장  : ' + childData.NEXT_STATION);
               var json_data = {
                 //버스번호 : des_bus_id,
-                방향 : childData.NEXT_STATION+' 방향',
-                버스이름 : obj.BUSSTOP_LIST[i].LINE_NAME ,
-                남은시간 : obj.BUSSTOP_LIST[i].REMAIN_MIN + '분',
-                남은정류장수 : obj.BUSSTOP_LIST[i].REMAIN_STOP +'개',
+                방향 : childData.NEXT_STATION ,
+                버스이름 : obj.BUSSTOP_LIST[i].LINE_NAME,
+                남은시간 : obj.BUSSTOP_LIST[i].REMAIN_MIN ,
+                남은정류장수 : obj.BUSSTOP_LIST[i].REMAIN_STOP ,
                 //곧도착 : obj.BUSSTOP_LIST[i].ARRIVE_FLAG == 1 ? '곧 도착 !! ' : '멀었네~',
 
               }
-
-            //console.log(json_data)
-            Answer.push(json_data);
-
+              console.log( typeof json_data)
+              Answer.push(json_data);
           }
           })
         }
       })
 
     })
-      var json = '{"정류장":12\n\r, "남은시간":42}';
-      objzz = JSON.parse(json);
-
-      setTimeout(function(){ Answer= objzz } , 1200);
-      setTimeout(function(){ res.send( {success:haveData?'데이터 있음' : '데이터 없음', message:Answer })   } , 1300);
+      setTimeout(function(){ res.json( {success:haveData?'데이터 있음' : '데이터 없음', message:Answer })   } , 1300);
 });
 
 app.listen(9000, () => {
