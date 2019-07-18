@@ -80,18 +80,18 @@ app.get('/', function(req, res, next){
 app.post('/dest/:desti', function(req, res){
 
     // 카카오톡 오픈빌더는 req.body.action.params 에 파라미터가 담겨있음.
-    console.log('요청 : ' + req.params.desti);
+    //console.log('요청 : ' + req.params.desti);
 
     //console.log('파라미터 : ' +  req.body.action.params.desti)
 
     // local 용
-    var dest = req.params.desti;
+    //var dest = req.params.desti;
 
     // 카톡용
-    //var dest = req.body.action.params.desti
+    var dest = req.body.action.params.desti
 
     var haveData = false;   //데이터가 있는지 없는지 확인하는 플래그 변수
-    var Answer = new Array(); // 도착정보 데이터를 담을 배열 변수.
+    var Answer = '' // 도착정보 데이터를 담을 배열 변수.
 
     var 버스번호 = ''
     var 버스이름 = ''
@@ -128,26 +128,35 @@ app.post('/dest/:desti', function(req, res){
             if( obj.BUSSTOP_LIST.length > 0 ){
               haveData = true;
             }
-            for( var i = 0; i < obj.BUSSTOP_LIST.length; i++){
+            var i = 0;
+            for( i = 0; i < obj.BUSSTOP_LIST.length; i++){
               //console.log("버스 번호 : " + des_bus_id )
               //console.log('버스 이름 : ' + obj.BUSSTOP_LIST[i].LINE_NAME);
               //console.log('남은 시간 : ' + obj.BUSSTOP_LIST[i].REMAIN_MIN + '분');
               //console.log('남은 정류장 수 : ' + obj.BUSSTOP_LIST[i].REMAIN_STOP +'개' );
               //console.log("----------------------------------------------------");
+              //obj.BUSSTOP_LIST[i].ARRIVE_FLAG
+
               console.log('다음정류장  : ' + childData.NEXT_STATION);
-              var json_data = {
-                //버스번호 : des_bus_id,
-                방향 : childData.NEXT_STATION+' 방향',
-                버스이름 : obj.BUSSTOP_LIST[i].LINE_NAME ,
-                남은시간 : obj.BUSSTOP_LIST[i].REMAIN_MIN + '분',
-                남은정류장수 : obj.BUSSTOP_LIST[i].REMAIN_STOP +'개',
-                //곧도착 : obj.BUSSTOP_LIST[i].ARRIVE_FLAG == 1 ? '곧 도착 !! ' : '멀었네~',
 
-              }
+              var 방향 = childData.NEXT_STATION +'방향';
+              var 버스이름 = obj.BUSSTOP_LIST[i].LINE_NAME;
+              var 남은시간 = obj.BUSSTOP_LIST[i].REMAIN_MIN;
+              var 남은정류장수 = obj.BUSSTOP_LIST[i].REMAIN_STOP;
+              var 곧도착_flag = (obj.BUSSTOP_LIST[i].ARRIVE_FLAG == 0) ? false : true;
 
-            //console.log(json_data)
-            Answer.push(json_data);
+              var station_info =
+              '버스이름 : ' + 버스이름 + '\n'
+              + '방향 : ' + 방향 +' 방향'+'\n'
+              + '남은시간 : ' + 남은시간 + '분'+ '\n'
+              + '남은 정류장 수 : ' + 남은정류장수 + '개'+'\n';
 
+                if( 곧도착_flag ) {
+                  station_info += '버스가 곧 도착해요~' + '\n';
+                }
+
+              console.log("변환 : " + station_info)
+              Answer += station_info + '\n';
           }
           })
         }
