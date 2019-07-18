@@ -14,8 +14,8 @@
 광주광역시의 버스 정류장 이름을 입력하면 해당 정류장에 도착하는 버스에 대한 정보를 알려줍니다.
 
 ### 챗봇 스크린샷
-![screensh](./screenshot/capture1.png)
-![screensh](./screenshot/capture2.png)
+![screensh](./screenshot/capture1.jpg)
+![screensh](./screenshot/capture2.jpg)
 
 
 
