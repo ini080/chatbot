@@ -20,16 +20,6 @@ const type_forecast = 'ForecastSpaceData';    //동네 예보 조회.
 const $KEY = '3xdrYGV1u%2Buh2CQpRWI5Yrksa8SSTfgaYeNlNONmLGdZruok%2Frq08aizZkkLak1GYLGBhzwlLJibf6dWAqPd9A%3D%3D';
 
 
-var fullURL = $url + type_forecast;
-fullURL += "?ServiceKey=" + $KEY;
-fullURL += "&base_date=" + '20190718';
-fullURL += "&base_time=" + '18' +"00";
-fullURL += "&nx=" + '60' + "&ny=" + '75';
-fullURL += "&pageNo=1&numOfRows=7";
-fullURL += "&_type=json";
-
-
-
 // DB Info
 var config = {
     apiKey: "AIzaSyD4ZkncsADsvtaU7D3H_wT7pKAWvNO-EWg",
@@ -62,25 +52,53 @@ console.log(req.body)
 // 카카오 API 요청은 무조건 POST 방식으로.
 app.post('/weather/:location', function(req, res){
 
-    console.log(fullURL);
 
-    // local 용
+      // local 용
     var location = req.params.location;
     console.log('파라미터 : ' + req.params.location);
 
+    /* 변수 선언 */
+    var nx = '';
+    var ny = '';
+    var 지역 = '';
+
+    // DB에서 location의 nx, ny 찾기.
     ref.once('value',function(snapshot){
       snapshot.forEach(function(childSnapshot){
         var childKey = childSnapshot.key;
         var childData = childSnapshot.val();
 
-
-        // DB에서 파라미터(목적지) 를 찾아내서 일치하는 BUSSTOP_ID 를 반환함.
         if( childData.Location_C == location ){
-          console.log("찾았따 ! : " + location)
-          console.log(" nx : " + childData.Location_NX + " ny : " + childData.Location_NY)
+          nx = childData.Location_NX;
+          ny = childData.Location_NY;
+
+          if( childData.Location_A != 'Null' ){
+              지역 += childData.Location_A;
+          }
+          if( childData.Location_B != 'Null' ){
+              지역 += childData.Location_B;
+          }
+
+          지역 += childData.Location_C;
+
+          console.log( 지역 + " " + nx + " " + ny )
+          var fullURL = $url + type_forecast;
+          fullURL += "?ServiceKey=" + $KEY;
+          fullURL += "&base_date=" + '20190718';
+          fullURL += "&base_time=" + '18' +"00";
+          fullURL += "&nx=" + nx + "&ny=" + ny;
+          fullURL += "&pageNo=1&numOfRows=7";
+          fullURL += "&_type=json";
+
+          console.log(fullURL);
+
         }
       });
-});
+  });
+
+
+
+
 });
 
 // port : 9000
