@@ -4,17 +4,13 @@ let request = require('request');
 let cheerio = require('cheerio');
 const firebase = require("firebase");
 var bodyParser = require('body-parser')
-var fs = require('fs');
-
 
 const $url = 'http://api.gwangju.go.kr/json/arriveInfo';
 
 /* API KEY */
 const $KEY = '3xdrYGV1u%2Buh2CQpRWI5Yrksa8SSTfgaYeNlNONmLGdZruok%2Frq08aizZkkLak1GYLGBhzwlLJibf6dWAqPd9A%3D%3D';
 
-/* 조회할 정류소 ID */
-const $station = '';
-
+// DB Info
 var config = {
   apiKey: "AIzaSyCT7asnhQkhxll_K12MxHEGA9hFSz5EjsU",
   authDomain: "mystation-5d037.firebaseapp.com",
@@ -39,39 +35,8 @@ app.use(bodyParser.json());
 
 app.get('/', function(req, res, next){
 
-    var dest = req.param('dest');
-    console.log('요청 : ' + dest);
-
-    var haveData = false;
-    var Answer = new Array();
-
-
-    ref.once('value',function(snapshot){
-      snapshot.forEach(function(childSnapshot){
-        var childKey = childSnapshot.key;
-        var childData = childSnapshot.val();
-        var des_bus_id = '';
-        var toJson = {};
-        if( childData.BUSSTOP_NAME == dest ){
-          des_bus_id = childData.BUSSTOP_ID;
-          const $api_url = $url + '?serviceKey=' + $KEY + '&BUSSTOP_ID=' +des_bus_id;
-
-          console.log("최종URL : " + $api_url);
-
-
-          request($api_url, function(rq_err,rq_res,rq_data){
-            $ = cheerio.load(rq_data);
-
-            Answer = JSON.parse(rq_data);
-            console.log(Answer)
-
-          })
-        }
-      })
-
-    })
-
-      setTimeout(function(){ res.json({success:haveData, message:Answer}) } , 1000);
+  res.send('Post로 요청하세요');
+  
 });
 
 
