@@ -32,13 +32,13 @@ fullURL += "&_type=json";
 
 // DB Info
 var config = {
-  apiKey: "AIzaSyCT7asnhQkhxll_K12MxHEGA9hFSz5EjsU",
-  authDomain: "mystation-5d037.firebaseapp.com",
-  databaseURL: "https://mystation-5d037.firebaseio.com",
-  projectId: "mystation-5d037",
-  storageBucket: "mystation-5d037.appspot.com",
-  messagingSenderId: "633894674604",
-  appId: "1:633894674604:web:bfe6feb2ba4ba7ca"
+    apiKey: "AIzaSyD4ZkncsADsvtaU7D3H_wT7pKAWvNO-EWg",
+    authDomain: "kakao-location.firebaseapp.com",
+    databaseURL: "https://kakao-location.firebaseio.com",
+    projectId: "kakao-location",
+    storageBucket: "kakao-location.appspot.com",
+    messagingSenderId: "648358148479",
+    appId: "1:648358148479:web:bff412ab8ccb16c2"
 };
 
 // Initialize Firebase
@@ -63,14 +63,24 @@ console.log(req.body)
 app.post('/weather/:location', function(req, res){
 
     console.log(fullURL);
+
     // local 용
     var location = req.params.location;
-    //console.log('파라미터 : ' + req.params.desti);
+    console.log('파라미터 : ' + req.params.location);
 
-    // 카톡용
-    //var location = req.body.action.params.location
-    console.log(location)
+    ref.once('value',function(snapshot){
+      snapshot.forEach(function(childSnapshot){
+        var childKey = childSnapshot.key;
+        var childData = childSnapshot.val();
 
+
+        // DB에서 파라미터(목적지) 를 찾아내서 일치하는 BUSSTOP_ID 를 반환함.
+        if( childData.Location_C == location ){
+          console.log("찾았따 ! : " + location)
+          console.log(" nx : " + childData.Location_NX + " ny : " + childData.Location_NY)
+        }
+      });
+});
 });
 
 // port : 9000
