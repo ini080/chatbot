@@ -3,14 +3,19 @@ const app = express();
 
 let request = require('request');
 let cheerio = require('cheerio');
-let moment = require('moment');
 
+// 시간 로그용.
+let moment = require('moment');
 require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
 
 const firebase = require("firebase");
 var bodyParser = require('body-parser')
 
+// 사용 API : 광주광역시 BIS 도착정보
+//  https://www.data.go.kr/subMain.jsp#/L3B1YnIvcG90L215cC9Jcm9zTXlQYWdlL29wZW5EZXZEZXRhaWxQYWdlJEBeMDgyTTAwMDAxMzBeTTAwMDAxMzUkQF5wdWJsaWNEYXRhRGV0YWlsUGs9dWRkaTpkN2RiNWQ5ZS1hMzE2LTQ1YTctYWFiZC1mM2U4NzA5MGVjOTRfMjAxODAyMTkxNDM1JEBecHJjdXNlUmVxc3RTZXFObz03OTUwMzk3JEBecmVxc3RTdGVwQ29kZT1TVENEMDE=
+
+/* BaseURL */
 const $url = 'http://api.gwangju.go.kr/json/arriveInfo';
 
 /* API KEY */
@@ -27,27 +32,24 @@ var config = {
   appId: "1:633894674604:web:bfe6feb2ba4ba7ca"
 };
 
+// Initialize Firebase
 firebase.initializeApp(config);
-
 
 var db = firebase.database();
 var ref = db.ref('/');
 
-
+// using bodyparser
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-
-
+// get방식 요청일시.
 app.get('/', function(req, res, next){
 
   res.send('Post로 요청하세요');
 
 });
 
-
-
-// API 요청은 무조건 POST 방식으로.
+// 카카오 API 요청은 무조건 POST 방식으로.
 app.post('/dest/:desti', function(req, res){
 
     // 카카오톡 오픈빌더는 req.body.action.params 에 파라미터가 담겨있음.
