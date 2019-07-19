@@ -174,6 +174,7 @@ app.post('/weather/:location', function(req, res){
             console.log("다음시간 : " + next_time)
 
             // 현재시간 이후부터 보여줌.
+            // 현재시간 이후 24시간만 알려줌
             for( var i = 0; i < data_length; i++){
               if( obj.response.body.items.item[i].fcstTime >= next_time || obj.response.body.items.item[i].fcstDate >= nextDay ){
                   console.log(obj.response.body.items.item[i].fcstTime + " "+obj.response.body.items.item[i].fcstDate)
