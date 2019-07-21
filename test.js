@@ -13,7 +13,6 @@ moment.tz.setDefault("Asia/Seoul");
 
 /*
 console.log(`연도 => ${moment().year()}`)
-//연도 => 2018
 console.log(`월 (※ 0〜11의 값) => ${moment().month()}`)
 //월 (※ 0〜11의 값) => 0
 console.log(`일 => ${moment().date()}`)
