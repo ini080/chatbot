@@ -1,3 +1,4 @@
+
 const express = require('express');
 const app = express();
 
@@ -77,7 +78,7 @@ app.post('/weather', function(req, res){
     console.log('로컬 파라미터 : ' + req.params.location);
 
     // 카톡용
-    var 특별시 = req.body.action.params.location;
+    var 특별시 = req.body.action.params.city;
     var dong = req.body.action.params.dong;
     console.log('카톡 파라미터 : ' + 특별시 + " " + dong);
 
@@ -137,23 +138,72 @@ app.post('/weather', function(req, res){
 
           //Base_time  : 0200, 0500, 0800, 1100, 1400, 1700, 2000, 2300
           var base_time = Number(hours);
+          var base_min = Number(minutes);
+
+
           if(base_time < 02) {
-            base_time = '2300';
+            if( minutes < 11 ){
+              base_time = '0200';
+            }
+            else {
+              base_time = '2300';
+            }
           }else if(base_time < 05){
-            base_time = '0200';
+            if( minutes < 11 ){
+              base_time = '2300';
+            }
+            else {
+              base_time = '0200';
+            }
           }else if(base_time < 08){
-            base_time = '0500';
+            if( minutes < 11 ){
+              base_time = '0200';
+            }
+            else {
+              base_time = '0500';
+            }
           }else if(base_time < 11){
-            base_time = '0800';
+            if( minutes < 11 ){
+              base_time = '0500';
+            }
+            else {
+              base_time = '0800';
+            }
           }else if(base_time < 14){
-            base_time = '1100';
+            if( minutes < 11 ){
+              base_time = '0800';
+            }
+            else {
+              base_time = '1100';
+            }
           }else if(base_time < 17){
-            base_time = '1400';
+            if( minutes < 11 ){
+              base_time = '1100';
+            }
+            else {
+              base_time = '1400';
+            }
           }else if(base_time < 20){
-            base_time = '1700';
-          }else if(base_time < 23){
-            base_time = '2000';
+            if( minutes < 11 ){
+              base_time = '1100';
+            }
+            else {
+              base_time = '1700';
+            }
+          }else if(base_time <= 23){
+            if( minutes < 11 ){
+              base_time = '1700';
+            }
+            else {
+              base_time = '2000';
+            }
           }
+
+          console.log('베이스 타임 수정중 : ' + base_time)
+
+          console.log("다음시간 : " + next_time)
+
+
 
           var nextDay = Number(year + month + date)+1;
 
@@ -173,9 +223,7 @@ app.post('/weather', function(req, res){
             obj = JSON.parse(rq_data);
 
             var data_length = obj.response.body.totalCount;
-            console.log('데이터 길이 : ' + data_length)
-            console.log('베이스 타임 : ' + base_time)
-            console.log("다음시간 : " + next_time)
+
 
             // 현재시간 이후부터 보여줌.
             // 현재시간 이후 24시간만 알려줌
@@ -234,9 +282,11 @@ app.post('/weather', function(req, res){
                         continue;
                 }
 
-                console.log(obj.response.body.items.item[i].fcstTime + " "+obj.response.body.items.item[i].fcstDate)
+
                 Answer += '날짜 : ' + obj.response.body.items.item[i].fcstDate + '\n' + '시간 : ' + obj.response.body.items.item[i].fcstTime + '\n';
                 Answer += inputCategory + " " + inputFcstValue + '\n';
+
+
               }
             }
           })
@@ -245,13 +295,13 @@ app.post('/weather', function(req, res){
       });
   });
 
-        setTimeout(function(){  console.log( Answer )} , 2800);
+
         setTimeout(function(){ res.json( {success:true, message:Answer })   } , 3000);
 
 });
 
 
-// port : 9000
+// port : 8000
 app.listen(8000, () => {
     console.log('Example app listening on port 8000!');
 });
