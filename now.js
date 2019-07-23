@@ -1,3 +1,4 @@
+
 const express = require('express');
 const app = express();
 
@@ -318,19 +319,27 @@ app.post('/weather', function(req, res){
 //카톡 메시지 처리
 app.post('/translate/:text',function (req, res) {
 
-  var client_id = 'nPJYjRr1weJ4Hz4Cw5Rr';
-  var client_secret = 'V9fBY4Xy3f';
 
 
-  var api_url = 'https://openapi.naver.com/v1/language/translate';
+  // SMT 번역
+/*
+var api_url = 'https://openapi.naver.com/v1/language/translate';
+var client_id = 'nPJYjRr1weJ4Hz4Cw5Rr';
+var client_secret = 'V9fBY4Xy3f';
+*/
 
-  var trans_text = req.body.action.params.text
+// NMT 번역
+var api_url = 'https://openapi.naver.com/v1/papago/n2mt';
+var client_id = 'TDw9YWzfz7CtyP6jCNvx';
+var client_secret = '9JBCbMMHGG';
+
+var trans_text = req.body.action.params.text
 
   console.log('번역 요청 : ' +  trans_text)
 
   var options = {
        url: api_url,
-       form: {'source':'ko', 'target':'en', 'text':trans_text},
+       form: {'source':'en', 'target':'ko', 'text':trans_text},
        headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
     };
    request.post(options, function (error, response, body) {
