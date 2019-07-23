@@ -128,31 +128,32 @@ app.post('/dest/:desti', function(req, res){
 });
 
 
+
 // 카카오 API 요청은 무조건 POST 방식으로.
-app.post('/weather/:location', function(req, res){
+app.post('/weather', function(req, res){
 
 
-    // local 용
+      // local 용
     var location = req.params.location;
-    console.log('파라미터 : ' + req.params.location);
-
+    console.log('로컬 파라미터 : ' + req.params.location);
 
     // 카톡용
     var 특별시 = req.body.action.params.location;
-    var 동읍면 = req.body.action.params.dong;
+    var dong = req.body.action.params.dong;
+    console.log('카톡 파라미터 : ' + 특별시 + " " + dong);
 
     /* 변수 선언 */
     var nx = '';
     var ny = '';
     var 지역 = '';
-
+    var Answer = '';
     // DB에서 location의 nx, ny 찾기.
     ref.once('value',function(snapshot){
       snapshot.forEach(function(childSnapshot){
         var childKey = childSnapshot.key;
         var childData = childSnapshot.val();
 
-        if( childData.Location_C == location ){
+        if( childData.Location_C == dong ){
           nx = childData.Location_NX;
           ny = childData.Location_NY;
 
@@ -241,7 +242,65 @@ app.post('/weather/:location', function(req, res){
             // 현재시간 이후 24시간만 알려줌
             for( var i = 0; i < data_length; i++){
               if( obj.response.body.items.item[i].fcstTime >= next_time || obj.response.body.items.item[i].fcstDate >= nextDay ){
-                  console.log(obj.response.body.items.item[i].fcstTime + " "+obj.response.body.items.item[i].fcstDate)
+
+                  var category = obj.response.body.items.item[i].category;
+                  var inputCategory = '';
+                  var inputFcstValue = '';
+                  var fcstValue = obj.response.body.items.item[i].fcstValue;
+
+                  switch (category){
+                    case  "POP":
+                        inputCategory = "강수확률";
+                        inputFcstValue = fcstValue + "%";
+                        break;
+                    case "PTY":
+                        inputCategory = "강수형태";
+                        if(fcstValue == '0' ) inputFcstValue = "❌"; // 없음
+                        else if(fcstValue == '1'  ) inputFcstValue = "☔"; //비
+                        else if(fcstValue == "2" ) inputFcstValue = "비/눈"; // 비/눈
+                        else if(fcstValue == "3" ) inputFcstValue = "\uD83C\uDF28"; //눈
+                        else if(fcstValue == "4" ) inputFcstValue = "☔"; // 소나기
+                        break;
+                    case "RO6":
+                        inputCategory = "강수량";
+                        inputFcstValue = fcstValue;
+                        break;
+                    case "REH":
+                        inputCategory = "습도";
+                        inputFcstValue = fcstValue + "%";
+                        break;
+                    case "SO6":
+                        inputCategory = "적설량";
+                        inputFcstValue = fcstValue;
+                        break;
+                    case "SKY":
+                        inputCategory = "하늘상태";
+                        if(fcstValue == '1' ) inputFcstValue = "☀"; // 맑음
+                        else if(fcstValue == '3' ) inputFcstValue = "⛅"; // 구름많음
+                        else if(fcstValue == '4' ) inputFcstValue = "☁"; // 흐림
+                        break;
+                    case "T3H":
+                        inputCategory = "현재기온";
+                        inputFcstValue = fcstValue + "도";
+                        break;
+                    case "TMN":
+                        inputCategory = "최저기온";
+                        inputFcstValue = fcstValue;
+                        break;
+                    case "TMX":
+                        inputCategory = "오늘최고기온";
+                        inputFcstValue = fcstValue + " 도";
+                        break;
+                    case "UUU": case "VEC": case"VVV": case"WSD":
+                        continue;
+                }
+
+                console.log(obj.response.body.items.item[i].fcstTime + " "+obj.response.body.items.item[i].fcstDate)
+                Answer += '날짜 : ' + obj.response.body.items.item[i].fcstDate + '\n' + '시간 : ' + obj.response.body.items.item[i].fcstTime + '\n';
+                Answer += inputCategory + " " + inputFcstValue + '\n';
+
+                console.log(Answer)
+
               }
             }
           })
@@ -251,7 +310,7 @@ app.post('/weather/:location', function(req, res){
   });
 
 
-  res.json({success:true , message: 특별시+동읍면})
+        setTimeout(function(){ res.json( {success:true, message:Answer })   } , 3000);
 
 });
 
