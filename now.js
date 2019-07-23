@@ -43,10 +43,16 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
 // get방식 요청일시.
-app.get('/', function(req, res, next){
+//초기 상태 get '시작'' 버튼으로 시작
+app.get('/keyboard', function(req, res){
+  const menu = {
+      "type": 'buttons',
+      "buttons": ["시작"]
+  };
 
-  res.send('Post로 요청하세요');
-
+  res.set({
+      'content-type': 'application/json'
+  }).send(JSON.stringify(menu));
 });
 
 // 카카오 API 요청은 무조건 POST 방식으로.
@@ -246,6 +252,64 @@ app.post('/weather/:location', function(req, res){
 
 
   res.json({success:true , message: 특별시+동읍면})
+
+});
+
+
+//카톡 메시지 처리
+app.post('/translate/:text',function (req, res) {
+
+  var client_id = 'nPJYjRr1weJ4Hz4Cw5Rr';
+  var client_secret = 'V9fBY4Xy3f';
+
+
+  var api_url = 'https://openapi.naver.com/v1/language/translate';
+
+  var trans_text = req.body.action.params.text
+
+  console.log('번역 요청 : ' +  trans_text)
+
+  var options = {
+       url: api_url,
+       form: {'source':'ko', 'target':'en', 'text':trans_text},
+       headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
+    };
+   request.post(options, function (error, response, body) {
+     if (!error && response.statusCode == 200) {
+       var objBody = JSON.parse(response.body);
+       //번역된 메시지
+       console.log('번역된 메시지 : ' + objBody.message.result.translatedText);
+         console.log(`요청 시간 => ${moment().format("YYYY-MM-DD HH:mm:ss")}`)
+       console.log('-------------------------------------------------')
+
+       //카톡으로 번역된 메시지를 전송하기 위한 메시지
+       let massage = {
+           "message": {
+               "text": objBody.message.result.translatedText
+           },
+       };
+       //카톡에 메시지 전송
+       res.set({
+           'content-type': 'application/json'
+       }).send(JSON.stringify(massage));
+
+
+     } else {
+       //네이버에서 메시지 에러 발생
+       res.status(response.statusCode).end();
+       console.log('error = ' + response.statusCode);
+
+       let massage = {
+           "message": {
+               "text": response.statusCode
+           },
+       };
+       //카톡에 메시지 전송 에러 메시지
+       res.set({
+           'content-type': 'application/json'
+       }).send(JSON.stringify(massage));
+     }
+   });
 
 });
 
