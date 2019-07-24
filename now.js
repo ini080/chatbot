@@ -13,6 +13,37 @@ moment.tz.setDefault("Asia/Seoul");
 const firebase = require("firebase");
 var bodyParser = require('body-parser')
 
+// 사용 API : 광주광역시 BIS 도착정보
+//  https://www.data.go.kr/subMain.jsp#/L3B1YnIvcG90L215cC9Jcm9zTXlQYWdlL29wZW5EZXZEZXRhaWxQYWdlJEBeMDgyTTAwMDAxMzBeTTAwMDAxMzUkQF5wdWJsaWNEYXRhRGV0YWlsUGs9dWRkaTpkN2RiNWQ5ZS1hMzE2LTQ1YTctYWFiZC1mM2U4NzA5MGVjOTRfMjAxODAyMTkxNDM1JEBecHJjdXNlUmVxc3RTZXFObz03OTUwMzk3JEBecmVxc3RTdGVwQ29kZT1TVENEMDE=
+
+/* BaseURL */
+const $url = 'http://api.gwangju.go.kr/json/arriveInfo';
+
+/* API KEY */
+const $KEY = '3xdrYGV1u%2Buh2CQpRWI5Yrksa8SSTfgaYeNlNONmLGdZruok%2Frq08aizZkkLak1GYLGBhzwlLJibf6dWAqPd9A%3D%3D';
+
+// DB Info
+var config = {
+  apiKey: "AIzaSyCT7asnhQkhxll_K12MxHEGA9hFSz5EjsU",
+  authDomain: "mystation-5d037.firebaseapp.com",
+  databaseURL: "https://mystation-5d037.firebaseio.com",
+  projectId: "mystation-5d037",
+  storageBucket: "mystation-5d037.appspot.com",
+  messagingSenderId: "633894674604",
+  appId: "1:633894674604:web:bfe6feb2ba4ba7ca"
+};
+
+// Initialize Firebase
+firebase.initializeApp(config);
+
+var db = firebase.database();
+var ref = db.ref('/');
+
+// using bodyparser
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
+
+
 app.get('/keyboard', function(req, res){
   const menu = {
       "type": 'buttons',
@@ -24,38 +55,96 @@ app.get('/keyboard', function(req, res){
   }).send(JSON.stringify(menu));
 });
 
+
+app.post('/back',function(req,res){
+  let message = {
+  "version": "2.0",
+  "template": {
+    "outputs": [
+      {
+        "carousel": {
+          "type": "basicCard",
+          "items": [
+            {
+              "title": "광주광역시 버스",
+              "description": "정류장 이름을 검색해보세요\ud83d\ude00",
+              "thumbnail": {
+                "imageUrl": "https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjHjKLL9M3jAhXUFIgKHSvnBycQjRx6BAgBEAU&url=http%3A%2F%2Fm.bus.go.kr%2F&psig=AOvVaw1NmpwJ4wK6tXs-yb8Uq9QB&ust=1564069903559429"
+              },
+              "profile": {
+                "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
+              },
+              "buttons": [
+                {
+                  "action": "message",
+                  "label": "버스정류장",
+                  "messageText": "버스"
+                }
+              ]
+            },
+            {
+              "title": "날씨",
+              "description": "날씨를 예측해줍니다\ud83d\ude32",
+              "thumbnail": {
+                "imageUrl": "https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjF4PnX9M3jAhXBPXAKHceiDPsQjRx6BAgBEAU&url=https%3A%2F%2Fandroidweatherapps.wordpress.com%2F2016%2F11%2F28%2F%25EC%2598%25A4%25EB%258A%2598%25EB%2582%25A0%25EC%2594%25A8-%25EC%2596%25B4%25EC%25A0%259C%25EB%25B3%25B4%25EB%258B%25A4-%25EC%2598%25A4%25EB%258A%2598%25EC%259D%2580%25EB%25AF%25B8%25EC%2584%25B8%25EB%25A8%25BC%25EC%25A7%2580%25EB%2582%25A0%25EC%2594%25A8%25EC%259C%2584%25EC%25A0%25AF%25EA%25B8%25B0%25EC%2583%2581%2F&psig=AOvVaw26voYSxoqx0yv1tCJGEpVK&ust=1564069925012615"
+              },
+              "profile": {
+                "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
+              },
+              "buttons": [
+                {
+                  "action": "message",
+                  "label": "날씨 예보 보기",
+                  "messageText": "날씨"
+                }
+              ]
+            },
+            {
+              "title": "번역",
+              "description": "영어 -> 한글 번역해드려요\ud83d\ude0d",
+              "thumbnail": {
+                "imageUrl": "https://i.ytimg.com/vi/LNGSQHQdBW4/maxresdefault.jpg"
+              },
+              "profile": {
+                "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
+              },
+              "buttons": [
+                {
+                  "action": "message",
+                  "label": "번역하기",
+                  "messageText": "번역"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "quickReplies":[
+      {
+        "messageText":"처음으로",
+        "action":"message",
+        "label":"처음으로"
+      }
+    ],
+  }
+}
+
+  res.json( message );
+
+});
+
+
+
+
+
+
+
+
 // 카카오 API 요청은 무조건 POST 방식으로.
 app.post('/dest/:desti', function(req, res){
 
-  // 사용 API : 광주광역시 BIS 도착정보
-  //  https://www.data.go.kr/subMain.jsp#/L3B1YnIvcG90L215cC9Jcm9zTXlQYWdlL29wZW5EZXZEZXRhaWxQYWdlJEBeMDgyTTAwMDAxMzBeTTAwMDAxMzUkQF5wdWJsaWNEYXRhRGV0YWlsUGs9dWRkaTpkN2RiNWQ5ZS1hMzE2LTQ1YTctYWFiZC1mM2U4NzA5MGVjOTRfMjAxODAyMTkxNDM1JEBecHJjdXNlUmVxc3RTZXFObz03OTUwMzk3JEBecmVxc3RTdGVwQ29kZT1TVENEMDE=
 
-  /* BaseURL */
-  const $url = 'http://api.gwangju.go.kr/json/arriveInfo';
-
-  /* API KEY */
-  const $KEY = '3xdrYGV1u%2Buh2CQpRWI5Yrksa8SSTfgaYeNlNONmLGdZruok%2Frq08aizZkkLak1GYLGBhzwlLJibf6dWAqPd9A%3D%3D';
-
-  // DB Info
-  var config = {
-    apiKey: "AIzaSyCT7asnhQkhxll_K12MxHEGA9hFSz5EjsU",
-    authDomain: "mystation-5d037.firebaseapp.com",
-    databaseURL: "https://mystation-5d037.firebaseio.com",
-    projectId: "mystation-5d037",
-    storageBucket: "mystation-5d037.appspot.com",
-    messagingSenderId: "633894674604",
-    appId: "1:633894674604:web:bfe6feb2ba4ba7ca"
-  };
-
-  // Initialize Firebase
-  firebase.initializeApp(config);
-
-  var db = firebase.database();
-  var ref = db.ref('/');
-
-  // using bodyparser
-  app.use(bodyParser.urlencoded({extended:true}));
-  app.use(bodyParser.json());
 
     // 카카오톡 오픈빌더는 req.body.action.params 에 파라미터가 담겨있음.
     var dest = req.body.action.params.desti

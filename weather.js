@@ -185,7 +185,7 @@ app.post('/weather', function(req, res){
           fullURL += "&nx=" + nx + "&ny=" + ny;
           fullURL += "&pageNo=1&numOfRows=308";
           fullURL += "&_type=json";
-
+          console.log(fullURL)
           // API 요청
           request(fullURL, function(rq_err,rq_res,rq_data){
             $ = cheerio.load(rq_data);
@@ -200,15 +200,14 @@ app.post('/weather', function(req, res){
             var before_fcstDate = '';
             var before_fcstTime = '';
 
-            for( var i = 0; i < 82; i++){
-
+            for( var i = 0; i < data_length; i++){
               if( obj.response.body.items.item[i].fcstTime >= next_time || obj.response.body.items.item[i].fcstDate >= nextDay ){
 
                   var category = obj.response.body.items.item[i].category;
                   var inputCategory = '';
                   var inputFcstValue = '';
                   var fcstValue = obj.response.body.items.item[i].fcstValue;
-
+ 
                   switch (category){
                     case "TMN":  //06시
                         inputCategory = "\uD83C\uDF21최저기온";
