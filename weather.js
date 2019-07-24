@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 
@@ -11,21 +10,6 @@ var bodyParser = require('body-parser')
 let moment = require('moment');
 require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
-
-/*
-console.log(`연도 => ${moment().year()}`)
-console.log(`월 (※ 0〜11의 값) => ${moment().month()}`)
-//월 (※ 0〜11의 값) => 0
-console.log(`일 => ${moment().date()}`)
-//일 => 15
-console.log(`요일 => ${moment().day()}`)
-//요일 => 1
-console.log(`시 => ${moment().hours()}`)
-//시 => 10
-console.log(`분 => ${moment().minutes()}`)
-*/
-
-
 
 // 사용 API : (신)동네예보정보조회서비스
 //  https://www.data.go.kr/subMain.jsp#/L3B1YnIvcG90L215cC9Jcm9zTXlQYWdlL29wZW5EZXZEZXRhaWxQYWdlJEBeMDgyTTAwMDAxMzBeTTAwMDAxMzUkQF5wdWJsaWNEYXRhRGV0YWlsUGs9dWRkaTo5ZWQzZTRlMS0zNjU0LTQzN2EtYTg2Yi1iODg4OTIwMzRmOTAkQF5wcmN1c2VSZXFzdFNlcU5vPTc5MjQxNTQkQF5yZXFzdFN0ZXBDb2RlPVNUQ0QwMQ==
@@ -61,31 +45,18 @@ var ref = db.ref('/');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-// get방식 요청일시.
-app.get('/', function(req, res, next){
-console.log(fullURL);
-console.log(req.body)
-  res.send('Post로 요청하세요');
-
-});
-
 // 카카오 API 요청은 무조건 POST 방식으로.
 app.post('/weather', function(req, res){
 
-
-      // local 용
-    var location = req.params.location;
-    console.log('로컬 파라미터 : ' + req.params.location);
-
     // 카톡용
-    var 특별시 = req.body.action.params.city;
+    var city = req.body.action.params.city;
     var dong = req.body.action.params.dong;
-    console.log('카톡 파라미터 : ' + 특별시 + " " + dong);
+    console.log('요청 지역 : ' + city + " " + dong);
 
     /* 변수 선언 */
     var nx = '';
     var ny = '';
-    var 지역 = '';
+    var request_Location = '';
     var Answer = '';
     // DB에서 location의 nx, ny 찾기.
     ref.once('value',function(snapshot){
@@ -93,20 +64,23 @@ app.post('/weather', function(req, res){
         var childKey = childSnapshot.key;
         var childData = childSnapshot.val();
 
-        if( childData.Location_C == dong ){
+        // Location_A : 광역시
+        // Location_B : 시/군/구
+        // Location_C : 동/읍/면
+
+        if( childData.Location_A == city && childData.Location_C == dong){
+
+          request_Location += childData.Location_A;
+          if( childData.Location_B != 'Null' ){
+              request_Location += childData.Location_B;
+          }
+
+          request_Location += childData.Location_C;
           nx = childData.Location_NX;
           ny = childData.Location_NY;
 
-          if( childData.Location_A != 'Null' ){
-              지역 += childData.Location_A;
-          }
-          if( childData.Location_B != 'Null' ){
-              지역 += childData.Location_B;
-          }
 
-          지역 += childData.Location_C;
-
-          console.log( 지역 + " " + nx + " " + ny )
+          console.log('검색된 지역 : ' +  request_Location + " " + nx + " " + ny )
           var fullURL = $url + type_forecast;
 
           var year = moment().format('YYYY');
@@ -199,11 +173,9 @@ app.post('/weather', function(req, res){
             }
           }
 
-          console.log('베이스 타임 수정중 : ' + base_time)
-
-          console.log("다음시간 : " + next_time)
-
-
+          console.log('Base Time : ' + base_time + " " + 'Next Time : ' + next_time)
+          console.log(`요청 시간 => ${moment().format("YYYY-MM-DD HH:mm:ss")}`)
+          console.log('-------------------------------------------------')
 
           var nextDay = Number(year + month + date)+1;
 
@@ -213,8 +185,6 @@ app.post('/weather', function(req, res){
           fullURL += "&nx=" + nx + "&ny=" + ny;
           fullURL += "&pageNo=1&numOfRows=308";
           fullURL += "&_type=json";
-
-          console.log(fullURL);
 
           // API 요청
           request(fullURL, function(rq_err,rq_res,rq_data){
@@ -227,7 +197,11 @@ app.post('/weather', function(req, res){
 
             // 현재시간 이후부터 보여줌.
             // 현재시간 이후 24시간만 알려줌
-            for( var i = 0; i < data_length; i++){
+            var before_fcstDate = '';
+            var before_fcstTime = '';
+
+            for( var i = 0; i < 82; i++){
+
               if( obj.response.body.items.item[i].fcstTime >= next_time || obj.response.body.items.item[i].fcstDate >= nextDay ){
 
                   var category = obj.response.body.items.item[i].category;
@@ -236,57 +210,100 @@ app.post('/weather', function(req, res){
                   var fcstValue = obj.response.body.items.item[i].fcstValue;
 
                   switch (category){
-                    case  "POP":
-                        inputCategory = "강수확률";
-                        inputFcstValue = fcstValue + "%";
+                    case "TMN":  //06시
+                        inputCategory = "\uD83C\uDF21최저기온";
+                        inputFcstValue = fcstValue + "℃" + "\n";
                         break;
+                    case "TMX": // 15시
+                        inputCategory = "\uD83C\uDF21최고기온";
+                        inputFcstValue = fcstValue + "℃" + '\n';
+                        break;
+
                     case "PTY":
-                        inputCategory = "강수형태";
-                        if(fcstValue == '0' ) inputFcstValue = "❌"; // 없음
-                        else if(fcstValue == '1'  ) inputFcstValue = "☔"; //비
-                        else if(fcstValue == "2" ) inputFcstValue = "비/눈"; // 비/눈
-                        else if(fcstValue == "3" ) inputFcstValue = "\uD83C\uDF28"; //눈
-                        else if(fcstValue == "4" ) inputFcstValue = "☔"; // 소나기
+                        inputCategory = "\uD83D\uDE03눈/비소식";
+                        if(fcstValue == '1'  ) inputFcstValue = "비️"; //비
+                        else if(fcstValue == "2" ) inputFcstValue = "진눈개비"; // 비/눈
+                        else if(fcstValue == "3" ) inputFcstValue = "눈"; //눈
+                        else if(fcstValue == "4" ) inputFcstValue = "소나기"; // 소나기
                         break;
-                    case "RO6":
-                        inputCategory = "강수량";
-                        inputFcstValue = fcstValue;
+
+                    case "T3H":
+                        inputCategory = "\uD83C\uDF21기온";
+                        inputFcstValue = fcstValue + "℃";
+
+                        var forecase_time = obj.response.body.items.item[i].fcstTime.toString().substr(0,2);
+                        if( forecase_time == '06' || forecase_time =='15'){
+
+                        }
+                        else {
+                          inputFcstValue += '\n';
+                        }
                         break;
-                    case "REH":
-                        inputCategory = "습도";
+
+                    case "SKY":
+                        inputCategory = "☁하늘";
+                        if(fcstValue == '1' ) inputFcstValue = "맑음"; // 맑음
+                        else if(fcstValue == '3' ) inputFcstValue = "구름많음"; // 구름많음
+                        else if(fcstValue == '4' ) inputFcstValue = "흐림"; // 흐림
+                        break;
+
+                    case  "POP":
+                        inputCategory = "\u26F1강수확률";
                         inputFcstValue = fcstValue + "%";
                         break;
-                    case "SO6":
+
+                    case "R06":
+                        inputCategory = "☔강수량";
+                        if(fcstValue < 0.1  ) inputFcstValue = '';
+                        else if(fcstValue < 1.0 ) inputFcstValue = '1mm 미만';
+                        else if(fcstValue < 4.0 ) inputFcstValue = '1~4mm';
+                        else if(fcstValue < 9.0 ) inputFcstValue = "5~9mm";
+                        else if(fcstValue < 19.0 ) inputFcstValue = "10~19mm";
+                        else if(fcstValue < 39.0 ) inputFcstValue = "20~39mm";
+                        else if(fcstValue < 69.0 ) inputFcstValue = "40~69mm";
+                        else if(fcstValue >= 70.0 ) inputFcstValue = "70mm 이상";
+                        break;
+
+                    case "REH":
+                        inputCategory = "\uD83D\uDCA7습도";
+                        inputFcstValue = fcstValue + "%";
+                        break;
+
+                    case "S06":
                         inputCategory = "적설량";
-                        inputFcstValue = fcstValue;
+                        if(fcstValue < 0.1  ) inputFcstValue = '';
+                        else if(fcstValue < 1.0 ) inputFcstValue = '1cm 미만';
+                        else if(fcstValue < 4.0 ) inputFcstValue = '1~4cm';
+                        else if(fcstValue < 9.0 ) inputFcstValue = "5~9cm";
+                        else if(fcstValue < 19.0 ) inputFcstValue = "10~19cm";
+                        else if(fcstValue >= 20.0 ) inputFcstValue = "20cm 이상";
                         break;
-                    case "SKY":
-                        inputCategory = "하늘상태";
-                        if(fcstValue == '1' ) inputFcstValue = "☀"; // 맑음
-                        else if(fcstValue == '3' ) inputFcstValue = "⛅"; // 구름많음
-                        else if(fcstValue == '4' ) inputFcstValue = "☁"; // 흐림
-                        break;
-                    case "T3H":
-                        inputCategory = "현재기온";
-                        inputFcstValue = fcstValue + "도";
-                        break;
-                    case "TMN":
-                        inputCategory = "최저기온";
-                        inputFcstValue = fcstValue;
-                        break;
-                    case "TMX":
-                        inputCategory = "오늘최고기온";
-                        inputFcstValue = fcstValue + " 도";
-                        break;
-                    case "UUU": case "VEC": case"VVV": case"WSD":
-                        continue;
                 }
 
 
-                Answer += '날짜 : ' + obj.response.body.items.item[i].fcstDate + '\n' + '시간 : ' + obj.response.body.items.item[i].fcstTime + '\n';
-                Answer += inputCategory + " " + inputFcstValue + '\n';
 
 
+                let fcstDate = obj.response.body.items.item[i].fcstDate;
+                let fcstTime = obj.response.body.items.item[i].fcstTime;
+                if( before_fcstDate == fcstDate && before_fcstTime == fcstTime){
+
+                  if( inputCategory != '' && inputFcstValue != ''){
+                    Answer += inputCategory + " : " + inputFcstValue + '\n';
+                  }
+
+                }else{
+                  before_fcstDate = obj.response.body.items.item[i].fcstDate;
+                  before_fcstTime = obj.response.body.items.item[i].fcstTime;
+
+                  var text_month = obj.response.body.items.item[i].fcstDate.toString();
+                  var text_time = obj.response.body.items.item[i].fcstTime.toString();
+
+                  var answer_month = text_month.substr(4,2)
+                  var answer_day = text_month.substr(6,2)
+                  var answer_time = text_time.substr(0,2)
+
+                  Answer += answer_month +'월' + " " + answer_day + "일" + " "+ answer_time + "시 예보" + '\n' + '\n';
+                }
               }
             }
           })
@@ -296,7 +313,7 @@ app.post('/weather', function(req, res){
   });
 
 
-        setTimeout(function(){ res.json( {success:true, message:Answer })   } , 3000);
+        setTimeout(function(){ res.json( {success:true, message:Answer })   } , 2000);
 
 });
 
