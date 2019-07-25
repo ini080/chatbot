@@ -69,7 +69,7 @@ app.post('/back',function(req,res){
               "title": "광주광역시 버스",
               "description": "정류장 이름을 검색해보세요\ud83d\ude00",
               "thumbnail": {
-                "imageUrl": "https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjHjKLL9M3jAhXUFIgKHSvnBycQjRx6BAgBEAU&url=http%3A%2F%2Fm.bus.go.kr%2F&psig=AOvVaw1NmpwJ4wK6tXs-yb8Uq9QB&ust=1564069903559429"
+                "imageUrl": 'https://ifh.cc/g/a0knH.jpg'
               },
               "profile": {
                 "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
@@ -86,7 +86,7 @@ app.post('/back',function(req,res){
               "title": "날씨",
               "description": "날씨를 예측해줍니다\ud83d\ude32",
               "thumbnail": {
-                "imageUrl": "https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjF4PnX9M3jAhXBPXAKHceiDPsQjRx6BAgBEAU&url=https%3A%2F%2Fandroidweatherapps.wordpress.com%2F2016%2F11%2F28%2F%25EC%2598%25A4%25EB%258A%2598%25EB%2582%25A0%25EC%2594%25A8-%25EC%2596%25B4%25EC%25A0%259C%25EB%25B3%25B4%25EB%258B%25A4-%25EC%2598%25A4%25EB%258A%2598%25EC%259D%2580%25EB%25AF%25B8%25EC%2584%25B8%25EB%25A8%25BC%25EC%25A7%2580%25EB%2582%25A0%25EC%2594%25A8%25EC%259C%2584%25EC%25A0%25AF%25EA%25B8%25B0%25EC%2583%2581%2F&psig=AOvVaw26voYSxoqx0yv1tCJGEpVK&ust=1564069925012615"
+                "imageUrl": "https://ifh.cc/g/O7esT.jpg"
               },
               "profile": {
                 "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
@@ -103,7 +103,7 @@ app.post('/back',function(req,res){
               "title": "번역",
               "description": "영어 -> 한글 번역해드려요\ud83d\ude0d",
               "thumbnail": {
-                "imageUrl": "https://i.ytimg.com/vi/LNGSQHQdBW4/maxresdefault.jpg"
+                "imageUrl": "https://ifh.cc/g/tUiY9.jpg"
               },
               "profile": {
                 "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
@@ -114,6 +114,33 @@ app.post('/back',function(req,res){
                   "label": "번역하기",
                   "messageText": "번역"
                 }
+              ]
+            },
+            {
+              "title": "개발자정보",
+              "description": "챗봇을 개발한 개발자의 정보를 확인할 수 있어요.",
+              "thumbnail": {
+                "imageUrl": "https://ifh.cc/g/x8FNp.jpg"
+              },
+              "profile": {
+                "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
+              },
+              "buttons": [
+                {
+                  "action": "webLink",
+                  "label": "Github",
+                  "webLinkUrl": "https://github.com/ini080"
+                },
+                {
+                  "action": "webLink",
+                  "label": "Blog",
+                  "webLinkUrl": "https://ini080.github.io/"
+                },
+                {
+                  "action": "message",
+                  "label": "더 궁금해?",
+                  "messageText": "더보기"
+                },
               ]
             }
           ]
