@@ -84,7 +84,7 @@ app.post('/back',function(req,res){
             },
             {
               "title": "날씨",
-              "description": "날씨를 예측해줍니다\ud83d\ude32",
+              "description": "지역을 입력하면 날씨를 예측해줍니다\ud83d\ude32",
               "thumbnail": {
                 "imageUrl": "https://ifh.cc/g/O7esT.jpg"
               },
@@ -101,7 +101,7 @@ app.post('/back',function(req,res){
             },
             {
               "title": "번역",
-              "description": "영어 -> 한글 번역해드려요\ud83d\ude0d",
+              "description": "언어를 자동으로 감지하고 \n 영어 \u2194\ufe0f 한글 번역해드려요\ud83d\ude0d",
               "thumbnail": {
                 "imageUrl": "https://ifh.cc/g/tUiY9.jpg"
               },
@@ -214,13 +214,13 @@ app.post('/dest/:desti', function(req, res){
               var 곧도착_flag = (obj.BUSSTOP_LIST[i].ARRIVE_FLAG == 0) ? false : true;
 
               var station_info =
-              '버스이름 : ' + 버스이름 + '\n'
-              + '방향 : ' + 방향 +' 방향'+'\n'
-              + '남은시간 : ' + 남은시간 + '분'+ '\n'
-              + '남은 정류장 수 : ' + 남은정류장수 + '개'+'\n';
+              '\ud83d\ude8f버스이름 : ' + 버스이름 + '\n'
+              + '\u2194\ufe0f방향 : ' + 방향 +' 방향'+'\n'
+              + '\u231b\ufe0f남은시간 : ' + 남은시간 + '분'+ '\n'
+              + '\ud83d\udccd남은 정류장 수 : ' + 남은정류장수 + '개'+'\n';
 
                 if( 곧도착_flag ) {
-                  station_info += '버스가 곧 도착해요~' + '\n';
+                  station_info += '\ud83d\ude31버스가 곧 도착해요~' + '\n';
                 }
               Answer += station_info + '\n';
           }
@@ -235,8 +235,6 @@ app.post('/dest/:desti', function(req, res){
 //카톡 메시지 처리
 app.post('/translate/:text',function (req, res) {
 
-
-
   // SMT 번역
 /*
 var api_url = 'https://openapi.naver.com/v1/language/translate';
@@ -244,18 +242,61 @@ var client_id = 'nPJYjRr1weJ4Hz4Cw5Rr';
 var client_secret = 'V9fBY4Xy3f';
 */
 
+
+var trans_text = req.body.action.params.text
+
+var detected_text = '';
+
+
+
+
 // NMT 번역
 var api_url = 'https://openapi.naver.com/v1/papago/n2mt';
 var client_id = 'TDw9YWzfz7CtyP6jCNvx';
 var client_secret = '9JBCbMMHGG';
 
-var trans_text = req.body.action.params.text
+// 언어 감지
+var detect_client_id = 'aJZePSWyROoQiA3TszeN';
+var detect_client_secret = 'mGFYDn12po';
+var query = trans_text;
 
-  console.log('번역 요청 : ' +  trans_text)
+var detect_api_url = 'https://openapi.naver.com/v1/papago/detectLangs';
+var detect_request = require('request');
+var options = {
+    url: detect_api_url,
+    form: {'query': query},
+    headers: {'X-Naver-Client-Id':detect_client_id, 'X-Naver-Client-Secret': detect_client_secret}
+ };
+detect_request.post(options, function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    var resp = JSON.parse(body);
+    detected_text = resp.langCode;
+  }
+});
 
+
+console.log('번역 요청 : ' +trans_text)
+
+var source = '';
+var target = '';
+
+function trans_lang(){
+  console.log('감지 언어 : ' +detected_text)
+  if( detected_text == 'ko' ){
+    source = 'ko';
+    target = 'en';
+  }else if( detected_text =='en'){
+    source = 'en';
+    target = 'ko';
+  }
+}
+
+setTimeout(function(){ trans_lang() } , 300);
+
+function trans(){
   var options = {
        url: api_url,
-       form: {'source':'en', 'target':'ko', 'text':trans_text},
+       form: {'source':source, 'target':target, 'text':trans_text},
        headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
     };
    request.post(options, function (error, response, body) {
@@ -294,6 +335,9 @@ var trans_text = req.body.action.params.text
        }).send(JSON.stringify(massage));
      }
    });
+}
+
+setTimeout(function(){ trans() } , 500);
 
 });
 
