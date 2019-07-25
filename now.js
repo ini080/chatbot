@@ -132,11 +132,6 @@ app.post('/back',function(req,res){
                   "webLinkUrl": "https://github.com/ini080"
                 },
                 {
-                  "action": "webLink",
-                  "label": "Blog",
-                  "webLinkUrl": "https://ini080.github.io/"
-                },
-                {
                   "action": "message",
                   "label": "더 궁금해?",
                   "messageText": "더보기"
