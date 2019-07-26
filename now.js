@@ -69,7 +69,7 @@ app.post('/back',function(req,res){
               "title": "광주광역시 버스",
               "description": "정류장 이름을 검색해보세요\ud83d\ude00",
               "thumbnail": {
-                "imageUrl": 'https://ifh.cc/g/a0knH.jpg'
+                "imageUrl": 'https://ifh.cc/g/O7esT.jpg'
               },
               "profile": {
                 "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
@@ -86,7 +86,7 @@ app.post('/back',function(req,res){
               "title": "날씨",
               "description": "지역을 입력하면 날씨를 예측해줍니다\ud83d\ude32",
               "thumbnail": {
-                "imageUrl": "https://ifh.cc/g/O7esT.jpg"
+                "imageUrl": 'https://ifh.cc/g/a0knH.jpg'
               },
               "profile": {
                 "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
