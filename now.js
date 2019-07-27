@@ -101,7 +101,7 @@ app.post('/back',function(req,res){
             },
             {
               "title": "번역",
-              "description": "언어를 자동으로 감지하고 \n 영어 \u2194\ufe0f 한글 번역해드려요\ud83d\ude0d",
+              "description": "언어를 자동으로 감지하고 \n 영어 <--> 한글 번역해드려요\ud83d\ude0d",
               "thumbnail": {
                 "imageUrl": "https://ifh.cc/g/tUiY9.jpg"
               },
@@ -214,13 +214,13 @@ app.post('/dest/:desti', function(req, res){
               var 곧도착_flag = (obj.BUSSTOP_LIST[i].ARRIVE_FLAG == 0) ? false : true;
 
               var station_info =
-              '\ud83d\ude8f버스이름 : ' + 버스이름 + '\n'
-              + '\u2194\ufe0f방향 : ' + 방향 +' 방향'+'\n'
-              + '\u231b\ufe0f남은시간 : ' + 남은시간 + '분'+ '\n'
-              + '\ud83d\udccd남은 정류장 수 : ' + 남은정류장수 + '개'+'\n';
+              '\ud83d\udd34버스이름 : ' + 버스이름 + '\n'
+              + '방향 : ' + 방향 +' 방향'+'\n'
+              + '남은시간 : ' + 남은시간 + '분'+ '\n'
+              + '남은 정류장 수 : ' + 남은정류장수 + '개'+'\n';
 
                 if( 곧도착_flag ) {
-                  station_info += '\ud83d\ude31버스가 곧 도착해요~' + '\n';
+                  station_info += '버스가 곧 도착해요~' + '\n';
                 }
               Answer += station_info + '\n';
           }
