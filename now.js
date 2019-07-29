@@ -214,7 +214,7 @@ app.post('/dest/:desti', function(req, res){
               var 곧도착_flag = (obj.BUSSTOP_LIST[i].ARRIVE_FLAG == 0) ? false : true;
 
               var station_info =
-              '\ud83d\udd34버스이름 : ' + 버스이름 + '\n'
+              '\ud83d\ude0d버스이름 : ' + 버스이름 + '\n'
               + '방향 : ' + 방향 +' 방향'+'\n'
               + '남은시간 : ' + 남은시간 + '분'+ '\n'
               + '남은 정류장 수 : ' + 남은정류장수 + '개'+'\n';
@@ -222,7 +222,7 @@ app.post('/dest/:desti', function(req, res){
                 if( 곧도착_flag ) {
                   station_info += '버스가 곧 도착해요~' + '\n';
                 }
-              Answer += station_info + '\n';
+              Answer += station_info +'\n';
           }
           })
         }
