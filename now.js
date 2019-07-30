@@ -156,13 +156,6 @@ app.post('/back',function(req,res){
 
 });
 
-
-
-
-
-
-
-
 // 카카오 API 요청은 무조건 POST 방식으로.
 app.post('/dest/:desti', function(req, res){
 
