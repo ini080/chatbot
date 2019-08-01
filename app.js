@@ -1,3 +1,4 @@
+
 const express = require('express');
 const app = express();
 
@@ -42,8 +43,7 @@ var ref = db.ref('/');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-// get방식 요청일시.
-//초기 상태 get '시작'' 버튼으로 시작
+
 app.get('/keyboard', function(req, res){
   const menu = {
       "type": 'buttons',
@@ -55,16 +55,113 @@ app.get('/keyboard', function(req, res){
   }).send(JSON.stringify(menu));
 });
 
+
+app.post('/back',function(req,res){
+  let message = {
+  "version": "2.0",
+  "template": {
+    "outputs": [
+      {
+        "carousel": {
+          "type": "basicCard",
+          "items": [
+            {
+              "title": "광주광역시 버스",
+              "description": "정류장 이름을 검색해보세요\ud83d\ude00",
+              "thumbnail": {
+                "imageUrl": 'https://ifh.cc/g/O7esT.jpg'
+              },
+              "profile": {
+                "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
+              },
+              "buttons": [
+                {
+                  "action": "message",
+                  "label": "버스정류장",
+                  "messageText": "버스"
+                }
+              ]
+            },
+            {
+              "title": "날씨",
+              "description": "지역을 입력하면 날씨를 예측해줍니다\ud83d\ude32",
+              "thumbnail": {
+                "imageUrl": 'https://ifh.cc/g/a0knH.jpg'
+              },
+              "profile": {
+                "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
+              },
+              "buttons": [
+                {
+                  "action": "message",
+                  "label": "날씨 예보 보기",
+                  "messageText": "날씨"
+                }
+              ]
+            },
+            {
+              "title": "번역",
+              "description": "언어를 자동으로 감지하고 \n 영어 <--> 한글 번역해드려요\ud83d\ude0d",
+              "thumbnail": {
+                "imageUrl": "https://ifh.cc/g/tUiY9.jpg"
+              },
+              "profile": {
+                "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
+              },
+              "buttons": [
+                {
+                  "action": "message",
+                  "label": "번역하기",
+                  "messageText": "번역"
+                }
+              ]
+            },
+            {
+              "title": "개발자정보",
+              "description": "챗봇을 개발한 개발자의 정보를 확인할 수 있어요.",
+              "thumbnail": {
+                "imageUrl": "https://ifh.cc/g/x8FNp.jpg"
+              },
+              "profile": {
+                "imageUrl": "http://mblogthumb4.phinf.naver.net/MjAxNzA3MDRfMjA4/MDAxNDk5MTU1NzMyNDQx.cVZXDA__xeHH7-Tx9Sn2DDZN6t9HeIrc1wDc9MUendIg.fcNWvd4dCzjMhkPq86MpSEujGyviVvulb_JzHQfmWZMg.JPEG.yunbanga/photo.jpg?type=w800"
+              },
+              "buttons": [
+                {
+                  "action": "webLink",
+                  "label": "Github",
+                  "webLinkUrl": "https://github.com/ini080"
+                },
+                {
+                  "action": "message",
+                  "label": "더 궁금해?",
+                  "messageText": "더보기"
+                },
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "quickReplies":[
+      {
+        "messageText":"처음으로",
+        "action":"message",
+        "label":"처음으로"
+      }
+    ],
+  }
+}
+
+  res.json( message );
+
+});
+
 // 카카오 API 요청은 무조건 POST 방식으로.
 app.post('/dest/:desti', function(req, res){
 
+
+
     // 카카오톡 오픈빌더는 req.body.action.params 에 파라미터가 담겨있음.
-
-    // local 용
-    //var dest = req.params.desti;
-    //console.log('파라미터 : ' + req.params.desti);
-
-    // 카톡용
     var dest = req.body.action.params.desti
 
     // 로그... 서버의 api.log 에 기록이 남음.
@@ -110,7 +207,7 @@ app.post('/dest/:desti', function(req, res){
               var 곧도착_flag = (obj.BUSSTOP_LIST[i].ARRIVE_FLAG == 0) ? false : true;
 
               var station_info =
-              '버스이름 : ' + 버스이름 + '\n'
+              '\ud83d\ude0d버스이름 : ' + 버스이름 + '\n'
               + '방향 : ' + 방향 +' 방향'+'\n'
               + '남은시간 : ' + 남은시간 + '분'+ '\n'
               + '남은 정류장 수 : ' + 남은정류장수 + '개'+'\n';
@@ -118,7 +215,7 @@ app.post('/dest/:desti', function(req, res){
                 if( 곧도착_flag ) {
                   station_info += '버스가 곧 도착해요~' + '\n';
                 }
-              Answer += station_info + '\n';
+              Answer += station_info +'\n';
           }
           })
         }
@@ -128,150 +225,71 @@ app.post('/dest/:desti', function(req, res){
 });
 
 
-// 카카오 API 요청은 무조건 POST 방식으로.
-app.post('/weather/:location', function(req, res){
-
-
-    // local 용
-    var location = req.params.location;
-    console.log('파라미터 : ' + req.params.location);
-
-
-    // 카톡용
-    var 특별시 = req.body.action.params.location;
-    var 동읍면 = req.body.action.params.dong;
-
-    /* 변수 선언 */
-    var nx = '';
-    var ny = '';
-    var 지역 = '';
-
-    // DB에서 location의 nx, ny 찾기.
-    ref.once('value',function(snapshot){
-      snapshot.forEach(function(childSnapshot){
-        var childKey = childSnapshot.key;
-        var childData = childSnapshot.val();
-
-        if( childData.Location_C == location ){
-          nx = childData.Location_NX;
-          ny = childData.Location_NY;
-
-          if( childData.Location_A != 'Null' ){
-              지역 += childData.Location_A;
-          }
-          if( childData.Location_B != 'Null' ){
-              지역 += childData.Location_B;
-          }
-
-          지역 += childData.Location_C;
-
-          console.log( 지역 + " " + nx + " " + ny )
-          var fullURL = $url + type_forecast;
-
-          var year = moment().format('YYYY');
-          var month = moment().format('MM');
-          var date =  moment().format('DD');
-          var hours = moment().format('HH');
-          var minutes =  moment().format('mm');
-
-          //fcstTime : 0000, 0300, 0600, 0900, 1200, 1500, 1800, 2100
-          var next_time = Number(hours);
-          if(next_time < 03) {
-            next_time = '0300';
-          }else if(next_time < 06){
-            next_time = '0600';
-          }else if(next_time < 09){
-            next_time = '0900';
-          }else if(next_time < 12){
-            next_time = '1200';
-          }else if(next_time < 15){
-            next_time = '1500';
-          }else if(next_time < 18){
-            next_time = '1800';
-          }else if(next_time < 21){
-            next_time = '2100';
-          }else if(next_time < 24){
-            next_time = '0000';
-          }
-
-
-          //Base_time  : 0200, 0500, 0800, 1100, 1400, 1700, 2000, 2300
-          var base_time = Number(hours);
-          if(base_time < 02) {
-            base_time = '2300';
-          }else if(base_time < 05){
-            base_time = '0200';
-          }else if(base_time < 08){
-            base_time = '0500';
-          }else if(base_time < 11){
-            base_time = '0800';
-          }else if(base_time < 14){
-            base_time = '1100';
-          }else if(base_time < 17){
-            base_time = '1400';
-          }else if(base_time < 20){
-            base_time = '1700';
-          }else if(base_time < 23){
-            base_time = '2000';
-          }
-
-          var nextDay = Number(year + month + date)+1;
-
-          fullURL += "?ServiceKey=" + $KEY;
-          fullURL += "&base_date=" + year + month + date;
-          fullURL += "&base_time=" + base_time ;
-          fullURL += "&nx=" + nx + "&ny=" + ny;
-          fullURL += "&pageNo=1&numOfRows=308";
-          fullURL += "&_type=json";
-
-          console.log(fullURL);
-
-          // API 요청
-          request(fullURL, function(rq_err,rq_res,rq_data){
-            $ = cheerio.load(rq_data);
-
-            obj = JSON.parse(rq_data);
-
-            var data_length = obj.response.body.totalCount;
-            console.log('데이터 길이 : ' + data_length)
-            console.log('베이스 타임 : ' + base_time)
-            console.log("다음시간 : " + next_time)
-
-            // 현재시간 이후부터 보여줌.
-            // 현재시간 이후 24시간만 알려줌
-            for( var i = 0; i < data_length; i++){
-              if( obj.response.body.items.item[i].fcstTime >= next_time || obj.response.body.items.item[i].fcstDate >= nextDay ){
-                  console.log(obj.response.body.items.item[i].fcstTime + " "+obj.response.body.items.item[i].fcstDate)
-              }
-            }
-          })
-
-        }
-      });
-  });
-
-
-  res.json({success:true , message: 특별시+동읍면})
-
-});
-
-
 //카톡 메시지 처리
 app.post('/translate/:text',function (req, res) {
 
-  var client_id = 'nPJYjRr1weJ4Hz4Cw5Rr';
-  var client_secret = 'V9fBY4Xy3f';
+  // SMT 번역
+/*
+var api_url = 'https://openapi.naver.com/v1/language/translate';
+var client_id = 'nPJYjRr1weJ4Hz4Cw5Rr';
+var client_secret = 'V9fBY4Xy3f';
+*/
 
 
-  var api_url = 'https://openapi.naver.com/v1/language/translate';
+var trans_text = req.body.action.params.text
 
-  var trans_text = req.body.action.params.text
+var detected_text = '';
 
-  console.log('번역 요청 : ' +  trans_text)
 
+
+
+// NMT 번역
+var api_url = 'https://openapi.naver.com/v1/papago/n2mt';
+var client_id = 'TDw9YWzfz7CtyP6jCNvx';
+var client_secret = '9JBCbMMHGG';
+
+// 언어 감지
+var detect_client_id = 'aJZePSWyROoQiA3TszeN';
+var detect_client_secret = 'mGFYDn12po';
+var query = trans_text;
+
+var detect_api_url = 'https://openapi.naver.com/v1/papago/detectLangs';
+var detect_request = require('request');
+var options = {
+    url: detect_api_url,
+    form: {'query': query},
+    headers: {'X-Naver-Client-Id':detect_client_id, 'X-Naver-Client-Secret': detect_client_secret}
+ };
+detect_request.post(options, function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    var resp = JSON.parse(body);
+    detected_text = resp.langCode;
+  }
+});
+
+
+console.log('번역 요청 : ' +trans_text)
+
+var source = '';
+var target = '';
+
+function trans_lang(){
+  console.log('감지 언어 : ' +detected_text)
+  if( detected_text == 'ko' ){
+    source = 'ko';
+    target = 'en';
+  }else if( detected_text =='en'){
+    source = 'en';
+    target = 'ko';
+  }
+}
+
+setTimeout(function(){ trans_lang() } , 300);
+
+function trans(){
   var options = {
        url: api_url,
-       form: {'source':'ko', 'target':'en', 'text':trans_text},
+       form: {'source':source, 'target':target, 'text':trans_text},
        headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
     };
    request.post(options, function (error, response, body) {
@@ -310,6 +328,9 @@ app.post('/translate/:text',function (req, res) {
        }).send(JSON.stringify(massage));
      }
    });
+}
+
+setTimeout(function(){ trans() } , 500);
 
 });
 
