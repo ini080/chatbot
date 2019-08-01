@@ -7,10 +7,10 @@
 
 
 ### 챗봇 스크린샷
-![screensh](./screenshot/screensh1.jpg)
-![screensh](./screenshot/screensh2.jpg)
-![screensh](./screenshot/screensh3.jpg)
-![screensh](./screenshot/screensh4.jpg)
+![screensh](./screenshot/screenshot1.jpg)
+![screensh](./screenshot/screenshot2.jpg)
+![screensh](./screenshot/screenshot3.jpg)
+![screensh](./screenshot/screenshot4.jpg)
 
 # 버스 챗봇
 광주광역시 버스 정보 카카오 i 오픈빌더 챗봇.
@@ -18,15 +18,15 @@
 ## 소개
   - 실시간 버스 도착정보 검색
 광주광역시의 버스 정류장 이름을 입력하면 해당 정류장에 도착하는 버스에 대한 정보를 알려줍니다.
-![screensh](./screenshot/screensh5.jpg)
+![screensh](./screenshot/screenshot5.jpg)
 
  - 날씨 예보
 지역을 입력하면 3시간 단위로 날씨를 예측해서 알려줍니다.
-![screensh](./screenshot/screensh6.jpg)
+![screensh](./screenshot/screenshot6.jpg)
 
  - 한영 번역
 번역할 말을 입력하면 자동으로 언어를 인식하여 번역을 해드립니다. 문장이면 더 좋아요~
-![screensh](./screenshot/screensh7.jpg)
+![screensh](./screenshot/screenshot7.jpg)
 
 ## 개발환경
 - 개발툴 : Atom
