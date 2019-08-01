@@ -7,7 +7,7 @@
 
 
 ### 챗봇 스크린샷
-![screensh](./screenshot/screenshot1.jpg)
+![screensh](./screenshot/screenshot1.jpg)  
 ![screensh](./screenshot/screenshot2.jpg)
 ![screensh](./screenshot/screenshot3.jpg)
 ![screensh](./screenshot/screenshot4.jpg)
