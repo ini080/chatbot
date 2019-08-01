@@ -33,9 +33,10 @@
 - 언어 : Node.js
 - DB : Firebase
 - 배포 : Amazone EC2
-- 버스 API : 광주광역시 BIS 정류소 정보 , 광주광역시 BIS 도착정보
-- 날씨 API : 기상청 (신)동네예보정보조회서비스
-- 번역 API : 네이버 Papago NMT 번역
+- API 정보
+버스 API : 광주광역시 BIS 정류소 정보 , 광주광역시 BIS 도착정보
+날씨 API : 기상청 (신)동네예보정보조회서비스
+번역 API : 네이버 Papago NMT 번역
 
 ```
 npm install
