@@ -23,7 +23,6 @@ const type_forecast = 'ForecastSpaceData';    //동네 예보 조회.
 /* API KEY */
 const $KEY = '3xdrYGV1u%2Buh2CQpRWI5Yrksa8SSTfgaYeNlNONmLGdZruok%2Frq08aizZkkLak1GYLGBhzwlLJibf6dWAqPd9A%3D%3D';
 
-
 // DB Info
 var config = {
     apiKey: "AIzaSyD4ZkncsADsvtaU7D3H_wT7pKAWvNO-EWg",
@@ -278,10 +277,7 @@ app.post('/weather', function(req, res){
                         else if(fcstValue >= 20.0 ) inputFcstValue = "20cm 이상";
                         break;
                 }
-
-
-
-
+                 
                 let fcstDate = obj.response.body.items.item[i].fcstDate;
                 let fcstTime = obj.response.body.items.item[i].fcstTime;
                 if( before_fcstDate == fcstDate && before_fcstTime == fcstTime){
