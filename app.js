@@ -143,8 +143,6 @@ app.post('/back',function(req,res){
 // 카카오 API 요청은 무조건 POST 방식으로.
 app.post('/dest/:desti', function(req, res){
 
-
-
     // 카카오톡 오픈빌더는 req.body.action.params 에 파라미터가 담겨있음.
     var dest = req.body.action.params.desti
 
@@ -181,8 +179,7 @@ app.post('/dest/:desti', function(req, res){
               haveData = true;
             }
 
-            var i = 0;
-            for( i = 0; i < obj.BUSSTOP_LIST.length; i++){
+            for(var i = 0; i < obj.BUSSTOP_LIST.length; i++){
 
               var 방향 = childData.NEXT_STATION +'방향';
               var 버스이름 = obj.BUSSTOP_LIST[i].LINE_NAME;
@@ -209,23 +206,11 @@ app.post('/dest/:desti', function(req, res){
 });
 
 
-//카톡 메시지 처리
+// 번역
 app.post('/translate/:text',function (req, res) {
 
-  // SMT 번역
-/*
-var api_url = 'https://openapi.naver.com/v1/language/translate';
-var client_id = 'nPJYjRr1weJ4Hz4Cw5Rr';
-var client_secret = 'V9fBY4Xy3f';
-*/
-
-
 var trans_text = req.body.action.params.text
-
 var detected_text = '';
-
-
-
 
 // NMT 번역
 var api_url = 'https://openapi.naver.com/v1/papago/n2mt';
@@ -313,9 +298,7 @@ function trans(){
      }
    });
 }
-
 setTimeout(function(){ trans() } , 500);
-
 });
 
 
