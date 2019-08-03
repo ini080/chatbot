@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-
 let request = require('request');
 let cheerio = require('cheerio');
 
@@ -108,11 +107,9 @@ app.post('/weather', function(req, res){
             next_time = '0000';
           }
 
-
           //Base_time  : 0200, 0500, 0800, 1100, 1400, 1700, 2000, 2300
           var base_time = Number(hours);
           var base_min = Number(minutes);
-
 
           if(base_time < 02) {
             if( minutes < 11 ){
@@ -206,7 +203,7 @@ app.post('/weather', function(req, res){
                   var inputCategory = '';
                   var inputFcstValue = '';
                   var fcstValue = obj.response.body.items.item[i].fcstValue;
- 
+
                   switch (category){
                     case "TMN":  //06시
                         inputCategory = "\uD83C\uDF21최저기온";
@@ -277,7 +274,7 @@ app.post('/weather', function(req, res){
                         else if(fcstValue >= 20.0 ) inputFcstValue = "20cm 이상";
                         break;
                 }
-                 
+
                 let fcstDate = obj.response.body.items.item[i].fcstDate;
                 let fcstTime = obj.response.body.items.item[i].fcstTime;
                 if( before_fcstDate == fcstDate && before_fcstTime == fcstTime){
@@ -306,12 +303,8 @@ app.post('/weather', function(req, res){
         }
       });
   });
-
-
         setTimeout(function(){ res.json( {success:true, message:Answer })   } , 2000);
-
 });
-
 
 // port : 8000
 app.listen(8000, () => {
