@@ -1,7 +1,5 @@
-
 const express = require('express');
 const app = express();
-
 let request = require('request');
 let cheerio = require('cheerio');
 
@@ -43,18 +41,7 @@ var ref = db.ref('/');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-app.get('/keyboard', function(req, res){
-  const menu = {
-      "type": 'buttons',
-      "buttons": ["시작"]
-  };
-
-  res.set({
-      'content-type': 'application/json'
-  }).send(JSON.stringify(menu));
-});
-
-
+// 폴백 응답 형식
 app.post('/back',function(req,res){
   let message = {
   "version": "2.0",
@@ -150,9 +137,7 @@ app.post('/back',function(req,res){
     ],
   }
 }
-
   res.json( message );
-
 });
 
 // 카카오 API 요청은 무조건 POST 방식으로.
