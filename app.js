@@ -205,7 +205,6 @@ app.post('/dest/:desti', function(req, res){
       setTimeout(function(){ res.json( {success:haveData?'데이터 있음' : '데이터 없음', message:Answer })   } , 1300);
 });
 
-
 // 번역
 app.post('/translate/:text',function (req, res) {
 
