@@ -18,7 +18,7 @@ var bodyParser = require('body-parser')
 const $url = 'http://api.gwangju.go.kr/json/arriveInfo';
 
 /* API KEY */
-const $KEY = '3xdrYGV1u%2Buh2CQpRWI5Yrksa8SSTfgaYeNlNONmLGdZruok%2Frq08aizZkkLak1GYLGBhzwlLJibf6dWAqPd9A%3D%3D';
+const $KEY = '';
 
 // DB Info
 var config = {
@@ -207,12 +207,12 @@ var detected_text = '';
 
 // NMT 번역
 var api_url = 'https://openapi.naver.com/v1/papago/n2mt';
-var client_id = 'TDw9YWzfz7CtyP6jCNvx';
-var client_secret = '9JBCbMMHGG';
+var client_id = '';
+var client_secret = '';
 
 // 언어 감지
-var detect_client_id = 'aJZePSWyROoQiA3TszeN';
-var detect_client_secret = 'mGFYDn12po';
+var detect_client_id = '';
+var detect_client_secret = '';
 var query = trans_text;
 
 var detect_api_url = 'https://openapi.naver.com/v1/papago/detectLangs';
