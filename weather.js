@@ -20,17 +20,10 @@ const $url = 'http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/'
 const type_forecast = 'ForecastSpaceData';    //동네 예보 조회.
 
 /* API KEY */
-const $KEY = '3xdrYGV1u%2Buh2CQpRWI5Yrksa8SSTfgaYeNlNONmLGdZruok%2Frq08aizZkkLak1GYLGBhzwlLJibf6dWAqPd9A%3D%3D';
+const $KEY = '';
 
 // DB Info
 var config = {
-    apiKey: "AIzaSyD4ZkncsADsvtaU7D3H_wT7pKAWvNO-EWg",
-    authDomain: "kakao-location.firebaseapp.com",
-    databaseURL: "https://kakao-location.firebaseio.com",
-    projectId: "kakao-location",
-    storageBucket: "kakao-location.appspot.com",
-    messagingSenderId: "648358148479",
-    appId: "1:648358148479:web:bff412ab8ccb16c2"
 };
 
 // Initialize Firebase
