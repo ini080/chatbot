@@ -38,6 +38,7 @@
 ```
 npm install
 node app.js
+node weather.js
 ```
 
 카카오 플러스친구 ID : <b>다솜봇</b>  
