@@ -9,19 +9,13 @@ const firebase = require("firebase");
 /* base URL */
 const $url = 'http://api.gwangju.go.kr/json/stationInfo';
 /* API KEY */
-const $KEY = '3xdrYGV1u%2Buh2CQpRWI5Yrksa8SSTfgaYeNlNONmLGdZruok%2Frq08aizZkkLak1GYLGBhzwlLJibf6dWAqPd9A%3D%3D';
+const $KEY = '';
 /* 조합 URL */
 const $api_url = $url + '?serviceKey=' + $KEY
 
 // Firebase Info
 var config  = {
-  apiKey: "AIzaSyCT7asnhQkhxll_K12MxHEGA9hFSz5EjsU",
-  authDomain: "mystation-5d037.firebaseapp.com",
-  databaseURL: "https://mystation-5d037.firebaseio.com",
-  projectId: "mystation-5d037",
-  storageBucket: "mystation-5d037.appspot.com",
-  messagingSenderId: "633894674604",
-  appId: "1:633894674604:web:bfe6feb2ba4ba7ca"
+
 };
 
 // Initialize Firebase
