@@ -12,9 +12,6 @@ const firebase = require("firebase");
 var bodyParser = require('body-parser')
 
 
-/* BaseURL */
-const $url = 'http://api.gwangju.go.kr/json/arriveInfo';
-
 /* API KEY */
 const $KEY = '';
 
